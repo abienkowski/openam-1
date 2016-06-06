@@ -875,7 +875,12 @@ public class OAuth2Constants {
         public static final String EMAIL_MAPPING = "org-forgerock-oidc-email-attribute-mapping";
         public static final String ADDRESS_MAPPING = "org-forgerock-oidc-address-attribute-mapping";
         public static final String PHONE_MAPPING = "org-forgerock-oidc-phone-attribute-mapping";
-
+        /**
+        * Added based on commit d4422243ae9 for implied consent
+        * {@link https://stash.forgerock.org/projects/OPENAM/repos/openam/commits/d4422243ae9283c0c741e0a988fb48ae91be3b93}  
+        */
+        public static final String CLIENTS_CAN_SKIP_CONSENT = "clientsCanSkipConsent";
+        
         public static final String SUPPORTED_CLAIMS = "forgerock-oauth2-provider-supported-claims";
         public static final String DEFAULT_SCOPES = "forgerock-oauth2-provider-default-scopes";
         public static final String SUPPORTED_SCOPES = "forgerock-oauth2-provider-supported-scopes";
@@ -942,7 +947,12 @@ public class OAuth2Constants {
         public static final String ACCESS_TOKEN = "com.forgerock.openam.oauth2provider.accessToken";
         public static final String CLIENT_SESSION_URI = "com.forgerock.openam.oauth2provider.clientSessionURI";
         public static final String CLIENT_NAME = "com.forgerock.openam.oauth2provider.clientName";
-
+        /**
+         * Added based on commit d4422243ae9 for implied consent
+         * {@link https://stash.forgerock.org/projects/OPENAM/repos/openam/commits/d4422243ae9283c0c741e0a988fb48ae91be3b93}  
+         */
+        public static final String IS_CONSENT_IMPLIED = "isConsentImplied";
+        
         public static final String JWKS_URI = "com.forgerock.openam.oauth2provider.jwksURI";
         public static final String JWKS = "com.forgerock.openam.oauth2provider.jwks";
         public static final String CLIENT_JWT_PUBLIC_KEY = "com.forgerock.openam.oauth2provider.clientJwtPublicKey";

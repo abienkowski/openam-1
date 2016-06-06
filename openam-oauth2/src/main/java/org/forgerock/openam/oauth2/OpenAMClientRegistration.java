@@ -607,7 +607,31 @@ public class OpenAMClientRegistration implements OpenIdConnectClientRegistration
 
         return subjectType;
     }
+    
+    /**
+     * Added based on commit d4422243ae9 for implied consent
+     * {@link https://stash.forgerock.org/projects/OPENAM/repos/openam/commits/d4422243ae9283c0c741e0a988fb48ae91be3b93}  
+     */
+    private String getAttribute(String attributeName) {
+        final Set<String> set;
+        try {
+            set = amIdentity.getAttribute(attributeName);
+        } catch (Exception e) {
+            logger.error("Unable to get "+attributeName+" from repository", e);
+            throw OAuthProblemException.OAuthError.SERVER_ERROR.handle(Request.getCurrent(),
+                    "Unable to get " + attributeName + " from repository");
+        }
+        if (set.iterator().hasNext()){
+            return set.iterator().next();
+        }
+        return null;
+    }
 
+    @Override
+    public boolean isConsentImplied() {
+        return Boolean.parseBoolean(getAttribute(OAuth2Constants.OAuth2Client.IS_CONSENT_IMPLIED));
+    }
+    
     @Override
     public boolean verifyJwtIdentity(OAuth2Jwt jwt) {
 

@@ -981,6 +981,11 @@ public class OpenAMOAuth2ProviderSettings extends OpenAMSettingsImpl implements 
     public int getDeviceCodePollInterval() throws ServerException {
         return (int) getLongSettingValue(OAuth2ProviderService.DEVICE_CODE_POLL_INTERVAL);
     }
+    
+    @Override
+    public boolean clientsCanSkipConsent() throws ServerException {
+        return Boolean.parseBoolean(getStringSettingValue(OAuth2ProviderService.CLIENTS_CAN_SKIP_CONSENT));
+    }
 
     /**
      * ServiceListener implementation to clear cache when it changes.

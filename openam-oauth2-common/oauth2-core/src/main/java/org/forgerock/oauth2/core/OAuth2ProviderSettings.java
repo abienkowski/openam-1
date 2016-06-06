@@ -453,5 +453,13 @@ public interface OAuth2ProviderSettings {
      * @throws ServerException If the setting could not be retrieved.
      */
     int getDeviceCodePollInterval() throws ServerException;
+    
+    /**
+     * Whether clients can opt to skip resource owner consent during authorization flows.
+     * Note: Note: added based on https://stash.forgerock.org/projects/OPENAM/repos/openam/commits/d4422243ae9283c0c741e0a988fb48ae91be3b93#openam-oauth2/src/main/java/org/forgerock/oauth2/core/ClientRegistration.java
+     * @return <code>true</code> if clients are allowed to opt to skip resource owner consent.
+     * @throws ServerException If the setting could not be retrieved.
+     */
+    boolean clientsCanSkipConsent() throws ServerException;
 
 }

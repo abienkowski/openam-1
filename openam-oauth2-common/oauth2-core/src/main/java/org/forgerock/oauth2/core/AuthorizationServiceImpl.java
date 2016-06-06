@@ -115,12 +115,34 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         // is resource owner authenticated?
         final ResourceOwner resourceOwner = resourceOwnerSessionValidator.validate(request);
 
+        final boolean requireConsent = !providerSettings.clientsCanSkipConsent()
+                || !clientRegistration.isConsentImplied();
+        try {
+            userInfo = providerSettings.getUserInfo(request.getToken(AccessToken.class), request);
+        } catch (UnauthorizedClientException e) {
+            logger.debug("Couldn't get user info - continuing to display consent page without claims.", e);
+        }
+
+        String clientName = clientRegistration.getDisplayName(locale);
+        if (clientName == null) {
+            clientName = clientRegistration.getClientId();
+            logger.warn("Client does not have a display name or client name set. using client ID {} for display",
+                    clientName);
+    final boolean requireConsent = !providerSettings.clientsCanSkipConsent()
+            || !clientRegistration.isConsentImplied();
+
+    if (requireConsent) {
         final boolean consentSaved = providerSettings.isConsentSaved(resourceOwner,
                 clientRegistration.getClientId(), validatedScope);
 
         //plugin point
         final boolean haveConsent = consentVerifier.verify(consentSaved, request, clientRegistration);
 
+        /**
+         * For implied consent
+         * Modified based on based on commit d4422243ae9 for implied consent https://stash.forgerock.org/projects/OPENAM/repos/openam/commits/d4422243ae9283c0c741e0a988fb48ae91be3b93 
+         */
+        
         if (!haveConsent) {
             String localeParameter = request.getParameter(LOCALE);
             String uiLocaleParameter = request.getParameter(UI_LOCALES);
@@ -139,8 +161,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             String clientName = clientRegistration.getDisplayName(locale);
             if (clientName == null) {
                 clientName = clientRegistration.getClientId();
-                logger.warn("Client does not have a display name or client name set. using client ID {} for display",
-                        clientName);
+                logger.warn("Client does not have a display name or client name set. using client ID {} for " +
+                        "display", clientName);
             }
             final String displayDescription = clientRegistration.getDisplayDescription(locale);
             final String clientDescription = displayDescription == null ? "" : displayDescription;
@@ -148,8 +170,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                     clientRegistration.getScopeDescriptions(locale));
             final Map<String, String> claimDescriptions = getClaimDescriptions(userInfo.getValues(),
                     clientRegistration.getClaimDescriptions(locale));
-            throw new ResourceOwnerConsentRequired(clientName, clientDescription, scopeDescriptions, claimDescriptions,
-                    userInfo, resourceOwner.getName(providerSettings));
+            final boolean saveConsentEnabled = providerSettings.isSaveConsentEnabled();
+
+            throw new ResourceOwnerConsentRequired(clientName, clientDescription, scopeDescriptions,
+                    claimDescriptions, userInfo, resourceOwner.getName(providerSettings), saveConsentEnabled);
         }
 
         return tokenIssuer.issueTokens(request, clientRegistration, resourceOwner, scope, providerSettings);

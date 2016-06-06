@@ -141,4 +141,13 @@ public interface ClientRegistration {
      * Verifies that the supplied jwt is signed by this client.
      */
     boolean verifyJwtIdentity(OAuth2Jwt jwt);
+    
+    /**
+     * Gets whether or not the client wants the OAuth2 implementation to skip asking the resource owner for consent.
+     * Note: added based on https://stash.forgerock.org/projects/OPENAM/repos/openam/commits/d4422243ae9283c0c741e0a988fb48ae91be3b93#openam-oauth2/src/main/java/org/forgerock/oauth2/core/ClientRegistration.java
+     * @return true if the client is configured to skip resource owner consent.
+     */
+    boolean isConsentImplied();
+    
+    
 }
