@@ -53,6 +53,14 @@ public interface OAuth2ProviderSettings {
     Map<String, ResponseTypeHandler> getAllowedResponseTypes() throws UnsupportedResponseTypeException, ServerException;
 
     /**
+     * Determines if the consent can be saved or not, due to a lack of configuration.
+     *
+     * @return {@code true} if the consent can be saved, false if it is not configured properly.
+     */
+    boolean isSaveConsentEnabled();
+    
+    
+    /**
      * Determines whether a resource owner's consent has been saved from a previous authorize request.
      *
      * @param resourceOwner The resource owner.

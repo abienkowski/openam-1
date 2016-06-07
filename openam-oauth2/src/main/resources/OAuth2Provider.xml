@@ -392,7 +392,7 @@
                         <Value>5</Value>
                     </DefaultValues>
                 </AttributeSchema>
-				<AttributeSchema name="clientsCanSkipConsent" type="single" syntax="boolean" i18nKey="a131" order="420">
+				<AttributeSchema name="clientsCanSkipConsent" type="single" syntax="boolean" i18nKey="a131">
                     <BooleanValues>
                         <BooleanTrueValue i18nKey="i18nTrue">true</BooleanTrueValue>
                         <BooleanFalseValue i18nKey="i18nFalse">false</BooleanFalseValue>
